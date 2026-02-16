@@ -2,6 +2,8 @@
 #define __CLAUDE_V600_PP_TWAP_MQH__
 #property strict
 
+#include <Trade/Trade.mqh>
+
 // ==================== TWAP ИСПОЛНЕНИЕ ====================
 // Time-Weighted Average Price — слайсинг ордеров
 // По умолчанию ВЫКЛЮЧЕН

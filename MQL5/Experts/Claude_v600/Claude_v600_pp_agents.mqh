@@ -338,8 +338,6 @@ void AGT_Momentum(AgentSignal &sig, MarketContext &ctx)
    sig.score = (rsiScore + macdScore) / 2;
 
    // Дивергенция RSI vs цена
-   double price = SymbolInfoDouble(_Symbol, SYMBOL_BID);
-   double pricePrev2;
    double high2[];
    if(CopyHigh(_Symbol, _Period, 0, 10, high2) >= 10)
    {
