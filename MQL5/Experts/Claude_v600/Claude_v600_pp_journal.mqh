@@ -18,6 +18,10 @@ string CleanSymbol()
 {
    string sym = _Symbol;
 
+   // Убрать '+' в конце (типичный суффикс ECN брокеров)
+   int plusPos = StringFind(sym, "+");
+   if(plusPos > 0) sym = StringSubstr(sym, 0, plusPos);
+
    string suffixes[] = {"b", ".raw", ".ecn", ".pro", "_m",
                           "-ECN", ".std", ".r", ".e", ".p",
                           ".i", ".s", "_SB", ".stp", "m"};

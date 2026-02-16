@@ -286,7 +286,7 @@ void AGT_Momentum(AgentSignal &sig, MarketContext &ctx)
 
    if(!sig.enabled) return;
 
-   if(CopyBuffer(g_hRSI_agt, 0, 0, 3, g_bufRSI) < 3) return;
+   if(CopyBuffer(g_hRSI_agt, 0, 0, 10, g_bufRSI) < 10) return;
    if(CopyBuffer(g_hMACD_agt, 0, 0, 3, g_bufMACDMain) < 3) return;
    if(CopyBuffer(g_hMACD_agt, 1, 0, 3, g_bufMACDSignal) < 3) return;
 
@@ -342,7 +342,7 @@ void AGT_Momentum(AgentSignal &sig, MarketContext &ctx)
    if(CopyHigh(_Symbol, _Period, 0, 10, high2) >= 10)
    {
       ArraySetAsSeries(high2, true);
-      if(high2[0] > high2[5] && g_bufRSI[0] < g_bufRSI[0])
+      if(high2[0] > high2[5] && g_bufRSI[0] < g_bufRSI[5])
       {
          sig.score -= 20;  // Медвежья дивергенция
          sig.confidence = 0.8;
