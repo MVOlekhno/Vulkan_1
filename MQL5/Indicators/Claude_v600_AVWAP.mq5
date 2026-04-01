@@ -65,7 +65,7 @@ int OnCalculate(const int rates_total,
                 const double &low[],
                 const double &close[],
                 const long &tick_volume[],
-                const double &volume[],
+                const long &volume[],
                 const int &spread[])
 {
    if(rates_total < 2) return 0;

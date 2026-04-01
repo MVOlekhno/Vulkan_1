@@ -134,6 +134,26 @@ int OnInit()
    PP_UICreate();
    DIAG_Log("INIT", "Panel OK");
 
+   // Инициализировать имена агентов для панели сразу
+   g_signals[0].name = "VWAP";
+   g_signals[1].name = "SD";
+   g_signals[2].name = "Structure";
+   g_signals[3].name = "Momentum";
+   g_signals[4].name = "CtxFilter";
+   g_signals[5].name = "WPR MTF";
+   g_signals[6].name = "BetterVol";
+   g_signals[7].name = "TD REI";
+   g_signals[8].name = "PVSRA";
+   g_signals[9].name = "FibPivot";
+
+   for(int i = 0; i < MAX_AGENTS; i++)
+   {
+      g_uiAgentNames[i] = g_signals[i].name;
+      g_uiAgentScores[i] = 0;
+   }
+   g_uiAgentCount = MAX_AGENTS;
+   PP_UIUpdateAgentBlock();
+
    // 15. Таймер (обновление новостей раз в час)
    EventSetTimer(3600);
 

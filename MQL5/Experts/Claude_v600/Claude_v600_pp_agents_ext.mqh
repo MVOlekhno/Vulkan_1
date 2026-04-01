@@ -294,7 +294,7 @@ void AGTX_TDREI(AgentSignal &sig, MarketContext &ctx)
 
    int period = GetREIPeriod();
    double threshold = GetREIThreshold();
-   int barsNeeded = period + 6;
+   int barsNeeded = period + 9;  // max index = (period-1)+8, need period+8 minimum, +1 safety
 
    double high[], low[], close[];
    if(CopyHigh(_Symbol, _Period, 0, barsNeeded, high) < barsNeeded) return;

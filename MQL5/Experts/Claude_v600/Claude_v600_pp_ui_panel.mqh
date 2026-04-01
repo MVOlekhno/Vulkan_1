@@ -68,8 +68,10 @@ void PP_UICreate()
 
    // === ЗАГОЛОВОК ===
    y += S(5);
+   string tfStr = EnumToString(_Period);
+   StringReplace(tfStr, "PERIOD_", "");
    PP_UICreateLabel(PANEL_PREFIX + "title",
-      _Symbol + "  " + EnumToString(_Period) + "     Claude_v600",
+      CleanSymbol() + "  " + tfStr + "     Claude_v600",
       g_panelX + S(10), y, g_scheme.textHighlight, S(10));
 
    // === БАЛАНС ===
@@ -564,14 +566,17 @@ void PP_UIExecuteTrade(int direction, int rMultiple)
       tp = NormalizeDouble(price - slPips * rMultiple, _Digits);
    }
 
-   // Используем глобальный CTrade (объявлен в Main EA)
-   // Этот вызов будет работать т.к. g_trade объявлен глобально
-   // Здесь заглушка — реальный вызов через extern
-   Print("[UI] Trade request: ",
-      (direction > 0) ? "BUY" : "SELL",
-      " Lots=", lotCalc,
-      " SL=", sl, " TP=", tp,
-      " R=", rMultiple);
+   string comment = "CV6_UI_" + IntegerToString(rMultiple) + "R";
+   if(direction > 0)
+   {
+      if(!g_trade.Buy(lotCalc, _Symbol, price, sl, tp, comment))
+         Print("[UI] BUY FAILED: ", GetLastError());
+   }
+   else
+   {
+      if(!g_trade.Sell(lotCalc, _Symbol, price, sl, tp, comment))
+         Print("[UI] SELL FAILED: ", GetLastError());
+   }
 }
 
 //+------------------------------------------------------------------+
@@ -598,7 +603,10 @@ void PP_UIMoveToBreakeven(long posType)
 
       newSL = NormalizeDouble(newSL, _Digits);
 
-      Print("[UI] Moving SL to BE: ticket=", ticket, " newSL=", newSL);
+      if(!g_trade.PositionModify(ticket, newSL, currentTP))
+         Print("[UI] BE FAILED: ticket=", ticket, " Error=", GetLastError());
+      else
+         Print("[UI] BE OK: ticket=", ticket, " newSL=", newSL);
    }
 }
 
@@ -613,7 +621,8 @@ void PP_UICloseByType(long posType)
       if(PositionGetInteger(POSITION_TYPE) != posType) continue;
 
       ulong ticket = PositionGetInteger(POSITION_TICKET);
-      Print("[UI] Close request: ticket=", ticket);
+      if(!g_trade.PositionClose(ticket))
+         Print("[UI] Close FAILED: ticket=", ticket, " Error=", GetLastError());
    }
 }
 
@@ -626,7 +635,8 @@ void PP_UICloseAll()
    {
       if(PositionGetSymbol(i) != _Symbol) continue;
       ulong ticket = PositionGetInteger(POSITION_TICKET);
-      Print("[UI] Close ALL request: ticket=", ticket);
+      if(!g_trade.PositionClose(ticket))
+         Print("[UI] Close ALL FAILED: ticket=", ticket, " Error=", GetLastError());
    }
 }
 
